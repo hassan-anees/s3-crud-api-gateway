@@ -1,0 +1,24 @@
+{
+  "name": "s3-crud-api-gateway",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hassan-anees/s3-crud-api-gateway.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hassan-anees/s3-crud-api-gateway/issues"
+  },
+  "homepage": "https://github.com/hassan-anees/s3-crud-api-gateway#readme",
+  "dependencies": {
+    "aws-sdk": "^2.1120.0",
+    "serverless-iam-roles-per-function": "^3.2.0"
+  }
+}

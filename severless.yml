@@ -1,0 +1,71 @@
+service: s3-file-api
+
+provider: 
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  apiName: ${self:service}
+  memorySize: 128 #mb
+  timeout: 10 #seconds
+  environment:
+    FILE_UPLOAD_BUCKET_NAME: ${self.custom.fileBucketName}
+
+plugins:
+  - serverless-iam-roles-per-function
+
+custom: 
+  fileBucketName: s3-file-bucket-dav-${self:provider.stage}
+
+functions:
+  # Post endpoint, helps upload files
+  s3FileUploader:
+    handler: src/upload.handler
+    name: s3-file-uploader
+    # api gateway trigger that lets out function executte
+    events:
+      - http:
+          path: file
+          method: POST
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "s3:Put*"
+        Resource: arn:aws:s3:::${self:custom.fileBucketName}/*
+ # GET endpoint, helps upload files
+  s3FileGet:
+    handler: src/get.handler
+    name: s3-file-get
+    # api gateway trigger that lets out function executte
+    events:
+      - http:
+          path: file/{fileKey}
+          method: GET
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "s3:Get*"
+        Resource: arn:aws:s3:::${self:custom.fileBucketName}/*
+ # GET endpoint, helps upload files
+  s3FileDelete:
+    handler: src/delete.handler
+    name: s3-file-delete
+    # api gateway trigger that lets out function executte
+    events:
+      - http:
+          path: file/{fileKey}
+          method: DELETE
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "s3:DeleteObject*"
+        Resource: arn:aws:s3:::${self:custom.fileBucketName}/*               
+
+#Deploys the s3 bucket
+resources:
+  Resources:
+    FileBucket:
+      Type: AWS::S3::Bucket
+      Propperties:
+        BucketName: ${self:custom.fileBucketName}
+        AccessControl: Private
