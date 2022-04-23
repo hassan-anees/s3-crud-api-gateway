@@ -66,6 +66,6 @@ resources:
   Resources:
     FileBucket:
       Type: AWS::S3::Bucket
-      Propperties:
+      Properties:
         BucketName: ${self:custom.fileBucketName}
         AccessControl: Private
